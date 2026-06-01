@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CESSLAND HOMES – Complete System</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 30% 20%, #0a0f2a, #020617);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    /* Glass sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 100%;
+      background: rgba(15, 25, 55, 0.6);
+      backdrop-filter: blur(16px);
+      border-right: 1px solid rgba(90, 150, 255, 0.3);
+      padding: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+    .logo h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #bfd9ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .logo h1 span {
+      background: #2a5cff;
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 40px;
+    }
+    .date-time {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #bfd6ff;
+      margin-top: 0.5rem;
+    }
+
+    .nav-menu {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 0 1rem;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      border-radius: 1rem;
+      color: #e0edff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .nav-item i {
+      width: 1.5rem;
+      font-size: 1.1rem;
+    }
+    .nav-item:hover, .nav-item.active {
+      background: rgba(42, 92, 255, 0.3);
+      color: white;
+      backdrop-filter: blur(4px);
+    }
+    .nav-item.active {
+      background: rgba(42, 92, 255, 0.5);
+      border-left: 3px solid #5a96ff;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 1.5rem;
+    }
+
+    /* Glass card */
+    .glass-card {
+      background: rgba(20, 35, 80, 0.4);
+      backdrop-filter: blur(12px);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(90, 150, 255, 0.3);
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Module header */
+    .module-header {
+      margin-bottom: 1.5rem;
+    }
+    .module-header h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .module-header p {
+      color: #bfd6ff;
+      font-size: 0.9rem;
+    }
+    .action-bar {
+      display: flex;
+      gap: 0.8rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      background: rgba(42, 92, 255, 0.3);
+      border: 1px solid rgba(90, 150, 255, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .action-btn:hover {
+      background: rgba(42, 92, 255, 0.6);
+    }
+
+    /* Metrics grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .metric-card {
+      background: rgba(15, 25, 60, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 1.2rem;
+      padding: 1rem;
+      border: 1px solid rgba(90, 150, 255, 0.3);
+    }
+    .metric-title {
+      font-size: 0.75rem;
+      color: #bfd6ff;
+      margin-bottom: 0.3rem;
+    }
+    .metric-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .data-table th, .data-table td {
+      padding: 0.7rem 0.3rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(90, 150, 255, 0.2);
+    }
+    .status-badge {
+      background: rgba(34, 197, 94, 0.2);
+      color: #86efac;
+      padding: 0.2rem 0.5rem;
+      border-radius: 1rem;
+      font-size: 0.7rem;
+    }
+    .status-warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+    }
+    .status-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+    }
+    .risk-low {
+      color: #86efac;
+    }
+    .risk-high {
+      color: #f87171;
+    }
+
+    /* KPI row for dashboard */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+      background: rgba(15, 25, 60, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 1.2rem;
+      padding: 1rem;
+      border: 1px solid rgba(90, 150, 255, 0.3);
+    }
+
+    /* Two columns for dashboard */
+    .two-columns {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { width: 70px; }
+      .sidebar .logo h1 span, .sidebar .nav-item span:not(i) { display: none; }
+      .main-content { margin-left: 70px; }
+      .two-columns { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">
+    <h1>CESSLAND<span>HOMES</span></h1>
+    <div class="date-time" id="currentDateTime"></div>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-item active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></div>
+    <div class="nav-item" data-page="buildings"><i class="fas fa-building"></i><span>Buildings</span></div>
+    <div class="nav-item" data-page="tenants"><i class="fas fa-users"></i><span>Tenants</span></div>
+    <div class="nav-item" data-page="payments"><i class="fas fa-credit-card"></i><span>Payments</span></div>
+    <div class="nav-item" data-page="bankreconciliation"><i class="fas fa-university"></i><span>Bank Reconciliation</span></div>
+    <div class="nav-item" data-page="invoices"><i class="fas fa-file-invoice"></i><span>Invoices</span></div>
+    <div class="nav-item" data-page="waterbilling"><i class="fas fa-droplet"></i><span>Water Billing</span></div>
+    <div class="nav-item" data-page="maintenance"><i class="fas fa-screwdriver-wrench"></i><span>Maintenance</span></div>
+    <div class="nav-item" data-page="reports"><i class="fas fa-chart-line"></i><span>Reports</span></div>
+    <div class="nav-item" data-page="settings"><i class="fas fa-gear"></i><span>Settings</span></div>
+    <div class="nav-item" data-page="auditlogs"><i class="fas fa-clock"></i><span>Audit Logs</span></div>
+  </div>
+  <div style="padding: 1rem; font-size: 0.7rem; text-align: center; color: #8ba5d0;">
+    <i class="fas fa-user-circle"></i> Roy Mwangi<br>Property Manager
+  </div>
+</div>
+
+<div class="main-content" id="mainContent">
+  <!-- Dashboard will be injected here -->
+</div>
+
+<script>
+  // Set current date/time in sidebar
+  function updateDateTime() {
+    const now = new Date();
+    document.getElementById('currentDateTime').innerText = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' • ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  updateDateTime();
+
+  // Mock data for all modules
+  const modulesData = {
+    buildings: {
+      metrics: [{ label: "Properties", value: "24" }, { label: "Units", value: "204" }, { label: "Vacant", value: "18" }, { label: "Locations", value: "6" }],
+      records: [
+        { building: "Kilimani Heights", location: "Kilimani", units: 48, occupancy: "94%", status: "Active" },
+        { building: "Westlands Court", location: "Westlands", units: 36, occupancy: "89%", status: "Active" },
+        { building: "Riverside Park", location: "Riverside", units: 60, occupancy: "82%", status: "Review" },
+        { building: "Lavington Suites", location: "Lavington", units: 44, occupancy: "91%", status: "Active" }
+      ]
+    },
+    tenants: {
+      metrics: [{ label: "Active", value: "186" }, { label: "Moving In", value: "12" }, { label: "Overdue", value: "7" }, { label: "Verified", value: "94%" }],
+      records: [
+        { name: "James Mwangi", unit: "B-12", lease: "12 Months", balance: "KES 0", status: "Current" },
+        { name: "Mary Wanjiku", unit: "A-03", lease: "10 Months", balance: "KES 0", status: "Current" },
+        { name: "David Odhiambo", unit: "C-08", lease: "8 Months", balance: "KES 52,000", status: "Overdue" },
+        { name: "Grace Atieno", unit: "D-14", lease: "18 Months", balance: "KES 0", status: "Current" }
+      ]
+    },
+    payments: {
+      metrics: [{ label: "Total Collected", value: "KES 1.25M" }, { label: "Matched", value: "99" }, { label: "Unmatched", value: "27" }, { label: "Pending", value: "4" }],
+      records: [
+        { ref: "MPESA-Q76X", tenant: "James Mwangi", amount: "KES 82,500", channel: "M-Pesa", status: "Matched" },
+        { ref: "KCB-2201", tenant: "Mary Wanjiku", amount: "KES 48,700", channel: "Bank", status: "Matched" },
+        { ref: "MPESA-Q41K", tenant: "David Odhiambo", amount: "KES 32,000", channel: "M-Pesa", status: "Pending" },
+        { ref: "EQTY-9013", tenant: "Grace Atieno", amount: "KES 72,200", channel: "Bank", status: "Matched" }
+      ]
+    },
+    bankreconciliation: {
+      metrics: [{ label: "Imported", value: "125" }, { label: "Matched", value: "99" }, { label: "Unmatched", value: "27" }, { label: "Accuracy", value: "79%" }],
+      records: [
+        { trans: "STK-10342", source: "KCB", amount: "KES 82,500", match: "James Mwangi", risk: "Low" },
+        { trans: "DEP-55231", source: "Equity", amount: "KES 120,000", match: "Unknown", risk: "High" },
+        { trans: "STK-92482", source: "M-Pesa", amount: "KES 48,700", match: "Mary Wanjiku", risk: "Low" },
+        { trans: "TRF-18821", source: "Co-op", amount: "KES 32,000", match: "David Odhiambo", risk: "Medium" }
+      ]
+    },
+    invoices: {
+      metrics: [{ label: "Issued", value: "214" }, { label: "Paid", value: "176" }, { label: "Pending", value: "31" }, { label: "Overdue", value: "7" }],
+      records: [
+        { invoice: "INV-4501", tenant: "James Mwangi", dueDate: "01 Jun", amount: "KES 82,500", status: "Paid" },
+        { invoice: "INV-4502", tenant: "Mary Wanjiku", dueDate: "01 Jun", amount: "KES 48,700", status: "Paid" },
+        { invoice: "INV-4503", tenant: "David Odhiambo", dueDate: "01 Jun", amount: "KES 52,000", status: "Overdue" },
+        { invoice: "INV-4504", tenant: "Grace Atieno", dueDate: "01 Jun", amount: "KES 72,200", status: "Sent" }
+      ]
+    },
+    waterbilling: {
+      metrics: [{ label: "Meters", value: "204" }, { label: "Alerts", value: "16" }, { label: "Total Bill", value: "KES 250K" }, { label: "Paid", value: "91%" }],
+      records: [
+        { meter: "WM-901", unit: "B-12", reading: "14.2m³", bill: "KES 2,250", status: "Paid" },
+        { meter: "WM-112", unit: "A-03", reading: "10.8m³", bill: "KES 1,780", status: "Paid" },
+        { meter: "WM-328", unit: "C-08", reading: "25.6m³", bill: "KES 4,100", status: "Alert" },
+        { meter: "WM-551", unit: "D-14", reading: "12.1m³", bill: "KES 1,940", status: "Pending" }
+      ]
+    },
+    maintenance: {
+      metrics: [{ label: "Open", value: "18" }, { label: "In Progress", value: "9" }, { label: "Closed", value: "42" }, { label: "SLA", value: "96%" }],
+      records: [
+        { ticket: "MT-1008", unit: "C-08", issue: "Plumbing", assignee: "Nairobi Fixers", status: "Urgent" },
+        { ticket: "MT-1011", unit: "B-12", issue: "Lighting", assignee: "In-house", status: "Open" },
+        { ticket: "MT-1014", unit: "D-14", issue: "Door Lock", assignee: "SecurePro", status: "Scheduled" },
+        { ticket: "MT-1020", unit: "A-03", issue: "AC Service", assignee: "CoolTech", status: "Closed" }
+      ]
+    },
+    reports: {
+      metrics: [{ label: "Templates", value: "12" }, { label: "Scheduled", value: "8" }, { label: "Arrears", value: "KES 520K" }, { label: "Uptime", value: "98%" }],
+      records: [
+        { report: "Monthly Collections", owner: "Finance", cadence: "Monthly", lastRun: "26 May", status: "Ready" },
+        { report: "Occupancy Summary", owner: "Operations", cadence: "Weekly", lastRun: "25 May", status: "Ready" },
+        { report: "Arrears Aging", owner: "Finance", cadence: "Daily", lastRun: "Today", status: "Ready" },
+        { report: "Water Consumption", owner: "Facilities", cadence: "Monthly", lastRun: "24 May", status: "Draft" }
+      ]
+    },
+    settings: {
+      metrics: [{ label: "Admins", value: "7" }, { label: "Roles", value: "12" }, { label: "Channels", value: "4" }, { label: "2FA", value: "Enabled" }],
+      records: [
+        { setting: "Role Permissions", category: "Security", owner: "Admin", updated: "Today", status: "Active" },
+        { setting: "Payment Channels", category: "Finance", owner: "Finance Lead", updated: "25 May", status: "Active" },
+        { setting: "SMS Templates", category: "Comms", owner: "Support", updated: "22 May", status: "Review" },
+        { setting: "Audit Retention", category: "Compliance", owner: "Admin", updated: "20 May", status: "Active" }
+      ]
+    },
+    auditlogs: {
+      metrics: [{ label: "Events", value: "1,284" }, { label: "Admin Actions", value: "16" }, { label: "Exports", value: "3" }, { label: "Incidents", value: "0" }],
+      records: [
+        { time: "10:31 AM", user: "John Mwenda", action: "Approved match", module: "Bank", risk: "Low" },
+        { time: "10:12 AM", user: "Mercy Njeri", action: "Exported report", module: "Reports", risk: "Medium" },
+        { time: "09:48 AM", user: "John Mwenda", action: "Updated tenant", module: "Tenants", risk: "Low" },
+        { time: "09:25 AM", user: "System", action: "Imported statement", module: "Bank", risk: "Low" }
+      ]
+    }
+  };
+
+  // Render dashboard
+  function renderDashboard() {
+    return `
+      <div class="glass-card" style="margin-bottom: 1.5rem;">
+        <h2>Welcome back, Roy M 🎉</h2>
+        <p style="color:#bfd6ff">Here's what's happening with your properties today.</p>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="metric-title">Total Collection</div><div class="metric-value">KES 1,250,000</div><div class="metric-title" style="color:#86efac">+15.8% from last month</div></div>
+        <div class="kpi-card"><div class="metric-title">Total Properties</div><div class="metric-value">24</div><div class="metric-title">+5.2% from last month</div></div>
+        <div class="kpi-card"><div class="metric-title">Occupied Units</div><div class="metric-value">186</div><div class="metric-title">88.6% occupancy</div></div>
+        <div class="kpi-card"><div class="metric-title">Vacant Units</div><div class="metric-value">18</div><div class="metric-title">4 units booked this week</div></div>
+      </div>
+      <div class="two-columns">
+        <div class="glass-card">
+          <h3>Collection Overview</h3>
+          <p style="font-size:0.8rem; color:#bfd6ff">This Month · Total collected: KES 1,250,000</p>
+          <canvas id="collectionChart" width="400" height="200" style="width:100%; max-height:200px;"></canvas>
+        </div>
+        <div class="glass-card">
+          <h3>Collection Breakdown</h3>
+          <div class="breakdown-item"><div class="breakdown-label">Rent 68% · KES 812,500</div><div class="progress-bar"><div class="progress-fill" style="width:68%"></div></div></div>
+          <div class="breakdown-item"><div class="breakdown-label">Water 20% · KES 250,000</div><div class="progress-bar"><div class="progress-fill" style="width:20%; background:#10b981;"></div></div></div>
+          <div class="breakdown-item"><div class="breakdown-label">Other Fees 12% · KES 150,000</div><div class="progress-bar"><div class="progress-fill" style="width:12%; background:#f59e0b;"></div></div></div>
+        </div>
+      </div>
+      <div class="glass-card">
+        <div style="display:flex; justify-content:space-between;"><h3>Recent Payments</h3><button class="action-btn" onclick="alert('View all payments')">View All →</button></div>
+        <table class="data-table"><thead><tr><th>Tenant</th><th>Property</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>James Mwangi</td><td>Kilimani Heights - B2-12</td><td>KES 25,000</td><td>26 May, 10:15 AM</td><td><span class="status-badge">Completed</span></td></tr>
+          <tr><td>Mary Wanjiku</td><td>Westlands Court - A1-05</td><td>KES 18,000</td><td>26 May, 09:45 AM</td><td><span class="status-badge">Completed</span></td></tr>
+          <tr><td>David Odhiambo</td><td>Riverside Park - C3-08</td><td>KES 30,000</td><td>26 May, 09:30 AM</td><td><span class="status-badge">Completed</span></td></tr>
+          <tr><td>Grace Atieno</td><td>Lavington Suites - B1-02</td><td>KES 22,000</td><td>25 May, 04:15 PM</td><td><span class="status-badge status-warning">Pending</span></td></tr>
+        </tbody></table>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem;">
+        <div class="glass-card"><h3>Outstanding Rent</h3><div style="font-size:1.8rem; font-weight:bold;">KES 520,000</div><div>0-30 Days: KES 310,000</div><div>31-60 Days: KES 130,000</div><div>60+ Days: KES 80,000</div></div>
+        <div class="glass-card"><h3>Bank Reconciliation</h3><div><span class="status-badge">LIVE</span></div><div style="display:flex; justify-content:space-between; margin-top:0.5rem;"><div>Imported: 125</div><div>Matched: 99 (79%)</div></div><button class="action-btn" style="margin-top:0.5rem;">View Reconciliation</button></div>
+      </div>
+    `;
+  }
+
+  // Render any module
+  function renderModule(moduleId, data) {
+    const metricsHtml = data.metrics.map(m => `<div class="metric-card"><div class="metric-title">${m.label}</div><div class="metric-value">${m.value}</div></div>`).join('');
+    const tableHeaders = Object.keys(data.records[0]).map(key => key.charAt(0).toUpperCase() + key.slice(1));
+    const tableRows = data.records.map(record => {
+      return `<tr>${Object.values(record).map(val => {
+        if (typeof val === 'string' && (val === 'Paid' || val === 'Active' || val === 'Current' || val === 'Matched' || val === 'Ready')) return `<td><span class="status-badge">${val}</span></td>`;
+        if (val === 'Overdue' || val === 'Alert' || val === 'Urgent') return `<td><span class="status-warning">${val}</span></td>`;
+        if (val === 'Review' || val === 'Pending' || val === 'Sent') return `<td><span class="status-warning">${val}</span></td>`;
+        if (val === 'High') return `<td><span class="status-danger">${val}</span></td>`;
+        if (val === 'Low') return `<td><span class="risk-low">${val}</span></td>`;
+        return `<td>${val}</td>`;
+      }).join('')}</tr>`;
+    }).join('');
+    return `
+      <div class="module-header">
+        <h2>${moduleId.charAt(0).toUpperCase() + moduleId.slice(1)} Management</h2>
+        <p>Cessland Homes Module</p>
+        <div class="action-bar">
+          <button class="action-btn">Filter</button>
+          <button class="action-btn">Export</button>
+          <button class="action-btn">+ New Record</button>
+        </div>
+      </div>
+      <div class="metrics-grid">${metricsHtml}</div>
+      <div class="glass-card">
+        <h3>Operational Records · Live data preview</h3>
+        <table class="data-table">
+          <thead><tr>${tableHeaders.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // Chart instance
+  let chartInstance = null;
+  function initDashboardChart() {
+    const ctx = document.getElementById('collectionChart')?.getContext('2d');
+    if (ctx) {
+      if (chartInstance) chartInstance.destroy();
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['4 May', '10 May', '16 May', '22 May', '28 May'],
+          datasets: [{ label: 'Total Collected (KES)', data: [850000, 980000, 1120000, 1180000, 1250000], borderColor: '#5a96ff', backgroundColor: 'rgba(90,150,255,0.1)', fill: true, tension: 0.3 }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: (ctx) => `KES ${ctx.raw.toLocaleString()}` } }, legend: { labels: { color: '#e0edff' } } }, scales: { y: { ticks: { color: '#bfd6ff', callback: (val) => 'KES ' + (val/1000) + 'k' }, grid: { color: 'rgba(90,150,255,0.2)' } }, x: { ticks: { color: '#bfd6ff' }, grid: { display: false } } } }
+      });
+    }
+  }
+
+  // Navigation
+  function navigateTo(page) {
+    const main = document.getElementById('mainContent');
+    if (page === 'dashboard') {
+      main.innerHTML = renderDashboard();
+      initDashboardChart();
+    } else if (modulesData[page]) {
+      main.innerHTML = renderModule(page, modulesData[page]);
+    } else {
+      main.innerHTML = `<div class="glass-card"><h2>Page under construction</h2><p>The ${page} module will be available soon.</p></div>`;
+    }
+    // Update active nav
+    document.querySelectorAll('.nav-item').forEach(item => {
+      if (item.getAttribute('data-page') === page) item.classList.add('active');
+      else item.classList.remove('active');
+    });
+  }
+
+  // Event listeners
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const page = item.getAttribute('data-page');
+      navigateTo(page);
+    });
+  });
+
+  // Initial load
+  navigateTo('dashboard');
+</script>
+
+<style>
+  .progress-bar { height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; margin: 0.3rem 0; }
+  .progress-fill { height: 100%; border-radius: 10px; background: #2a5cff; }
+  .breakdown-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.2rem; }
+</style>
+
+</body>
+</html>
