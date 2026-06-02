@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CESSLAND HOMES – Secure Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 30% 20%, #0a0f2a, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 1.5rem;
+    }
+
+    /* Enhanced blue glass effect – more blur, stronger reflection */
+    .glass-card {
+      background: rgba(20, 35, 80, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 2rem;
+      border: 1px solid rgba(90, 150, 255, 0.5);
+      box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(90, 150, 255, 0.2) inset, 0 0 20px rgba(40, 100, 255, 0.2);
+      max-width: 460px;
+      width: 100%;
+      padding: 2.2rem 2rem 2.2rem;
+      transition: all 0.2s ease;
+    }
+
+    /* Header section – exactly as in the image */
+    .brand {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .brand h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #ffffff, #c7e0ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .brand h1 span {
+      background: #2a5cff;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+      margin-left: 0.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .secure-badge {
+      margin-top: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #bfd6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .secure-badge::before {
+      content: "🔒";
+      font-size: 0.75rem;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+    }
+
+    /* Welcome area */
+    .welcome h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.2px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .welcome p {
+      color: #d0e2ff;
+      font-size: 0.9rem;
+      margin-bottom: 1.8rem;
+      line-height: 1.4;
+    }
+
+    /* Form fields – deeper glass inputs */
+    .input-group {
+      margin-bottom: 1.4rem;
+    }
+    .input-group label {
+      display: block;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: #ecf3ff;
+      margin-bottom: 0.4rem;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(15, 25, 60, 0.5);
+      border: 1px solid rgba(90, 150, 255, 0.6);
+      border-radius: 1rem;
+      font-size: 0.95rem;
+      color: white;
+      outline: none;
+      transition: all 0.2s;
+      font-family: inherit;
+      backdrop-filter: blur(4px);
+    }
+    .input-group input:focus {
+      border-color: #5a96ff;
+      background: rgba(30, 50, 100, 0.6);
+      box-shadow: 0 0 0 3px rgba(90, 150, 255, 0.3);
+    }
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Options row (checkbox + forgot) */
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      font-size: 0.85rem;
+    }
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      color: #e0edff;
+    }
+    .checkbox input {
+      width: 1rem;
+      height: 1rem;
+      margin: 0;
+      cursor: pointer;
+      accent-color: #3b6eff;
+    }
+    .forgot-link {
+      color: #9bc0ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .forgot-link:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    /* Button – glassy gradient */
+    .login-btn {
+      background: linear-gradient(105deg, #2a5cff, #1a3db0);
+      color: white;
+      width: 100%;
+      border: none;
+      padding: 0.85rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 0;
+      font-family: inherit;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+    }
+    .login-btn:hover {
+      background: linear-gradient(105deg, #3b6eff, #2a5cff);
+      transform: scale(1.01);
+      box-shadow: 0 8px 25px rgba(42, 92, 255, 0.4);
+    }
+
+    /* No footer – removed */
+    @media (max-width: 480px) {
+      .glass-card {
+        padding: 1.5rem;
+      }
+      .brand h1 {
+        font-size: 2rem;
+      }
+      .welcome h2 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="glass-card">
+  <!-- Header: CESSLAND HOMES + secure manager login -->
+  <div class="brand">
+    <h1>CESSLAND <span>HOMES</span></h1>
+    <div class="secure-badge">Secure manager login</div>
+  </div>
+
+  <!-- Welcome text -->
+  <div class="welcome">
+    <h2>Welcome back</h2>
+    <p>Sign in to continue to the Cessland Homes dashboard.</p>
+  </div>
+
+  <!-- Login form -->
+  <form id="loginForm">
+    <div class="input-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" name="email" value="john@cesslandhomes.co.ke" autocomplete="email" required>
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="**********" autocomplete="current-password" required>
+    </div>
+
+    <div class="options">
+      <label class="checkbox">
+        <input type="checkbox" id="rememberDevice"> Remember device
+      </label>
+      <a href="#" id="forgotPasswordLink" class="forgot-link">Forgot password?</a>
+    </div>
+
+    <button type="submit" class="login-btn">Enter Dashboard →</button>
+  </form>
+</div>
+
+<script>
+  // WORKING LOGIN (demo mode – accepts any non‑empty password)
+  const form = document.getElementById('loginForm');
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    if (!email || !password) {
+      alert('Please fill in both email and password.');
+      return;
+    }
+    // Simulate successful authentication
+    localStorage.setItem('cessland_user', JSON.stringify({ email, name: 'John Mwangi' }));
+    alert(`Welcome back, ${email.split('@')[0]}! Redirecting to dashboard...`);
+    // Replace with actual dashboard URL when ready:
+    // window.location.href = '/dashboard';
+  });
+
+  // Forgot password demo
+  document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    alert('A password reset link would be sent to your registered email address.');
+  });
+</script>
+</body>
+</html>
